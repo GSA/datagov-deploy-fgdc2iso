@@ -1,38 +1,99 @@
-Role Name
-=========
+[![CircleCI](https://circleci.com/gh/GSA/datagov-deploy-fgdc2iso.svg?style=svg)](https://circleci.com/gh/GSA/datagov-deploy-fgdc2iso)
 
-A brief description of the role goes here.
+# datagov-deploy-fgdc2iso
 
-Requirements
-------------
+Ansible role to deploy fgdc2iso for the Data.gov platform. Endpoint `/fgdc2iso` provides service for transformations from FGDC/RSE to ISO 19115-2.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Usage
 
-Role Variables
---------------
+Include this role in your `requirements.yml`.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+- src: https://github.com/gsa/datagov-deploy-fgdc2iso.git
+```
 
-Dependencies
-------------
+The role depends on having Tomcat installed. We recommend including the role
+`robertdebock.tomcat`  and its dependency roles.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Example playbook:
 
-Example Playbook
-----------------
+```yaml
+---
+- name: FGDC2ISO
+  hosts: fdgc2iso
+  roles:
+    - role: robertdebock.bootstrap
+    - role: robertdebock.core_dependencies
+    - role: robertdebock.java
+    - role: robertdebock.tomcat
+      vars:
+        tomcat_instances:
+          - name: "tomcat"
+            version: 9
+    - role: gsa.datagov-deploy-fgdc2iso
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+### Variables
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+See [robertdebock.tomcat](https://github.com/robertdebock/ansible-role-tomcat/blob/master/README.md) for
+additional variables.
 
-License
--------
+Above sample variables will install Tomcat 9 to `/opt/tomcat/`, and fdgc2iso.war
+file will be deployed to `/opt/tomcat/webapps/fdgc2iso/`.
 
-BSD
 
-Author Information
-------------------
+## Prerequisites for development
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+- [Docker](https://www.docker.com/)
+- [Python](https://www.python.org/) 3.6
+- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
+
+
+## Development
+
+### Requirements
+
+- [Docker](https://www.docker.com/get-started)
+- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
+- [Python](https://www.python.org) v3.6
+
+
+### Setup
+
+Pipenv creates a virtualenv for you and installs the python dependencies.
+
+    $ pipenv install --dev
+
+Then you can run commands with pipenv.
+
+    $ pipenv run molecule converge
+
+Or, you can activate the virtualenv in your shell so you don't have to run pipenv
+all the time.
+
+    $ pipenv shell
+
+
+### Run the tests
+
+Run the tests with [molecule](https://molecule.readthedocs.io/en/latest/).
+
+    $ pipenv run molecule test --all
+
+If you're new to molecule, see our
+[wiki](https://github.com/GSA/datagov-deploy/wiki/Developing-Ansible-roles-with-Molecule)
+for a quick primer.
+
+
+## Contributing
+
+See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
+
+
+## Public domain
+
+This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
+
+> This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+>
+> All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
