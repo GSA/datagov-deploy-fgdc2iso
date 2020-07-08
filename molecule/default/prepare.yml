@@ -21,3 +21,4 @@
         tomcat_instances:
           - name: "tomcat"
             version: 9
+            address: 127.0.0.1
