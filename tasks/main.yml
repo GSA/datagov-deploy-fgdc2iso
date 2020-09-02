@@ -42,9 +42,19 @@
     dest: /etc/saxon-license.lic
     mode: "0644"
 
-- name: copy fgdc2iso app
+- name: Create lib path for serverinfo.properties
+  file:
+    path: /opt/tomcat/lib/org/apache/catalina/util
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: 0750
+
+- name: copy serverinfo.properties
   copy:
     src: opt/tomcat/lib/org/apache/catalina/util/ServerInfo.properties
     dest: /opt/tomcat/lib/org/apache/catalina/util/ServerInfo.properties
-    mode: 0644
+    owner: tomcat
+    group: tomcat
+    mode: 0640
   notify: restart tomcat
