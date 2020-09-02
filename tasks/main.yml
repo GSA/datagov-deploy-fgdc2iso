@@ -41,3 +41,10 @@
       {{ fgdc2iso_saxon_license }}
     dest: /etc/saxon-license.lic
     mode: "0644"
+
+- name: copy fgdc2iso app
+  copy:
+    src: opt/tomcat/lib/org/apache/catalina/util/ServerInfo.properties
+    dest: /opt/tomcat/lib/org/apache/catalina/util/ServerInfo.properties
+    mode: 0644
+  notify: restart tomcat
