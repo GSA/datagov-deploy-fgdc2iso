@@ -1,4 +1,14 @@
 ---
+- name: Install dependencies
+  apt: 
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - jq
+      - curl
+      - cron
+
 - name: assert fgdc2iso_saxon_license exists
   fail:
     msg: fgdc2iso_saxon_license is required but has not been defined.
@@ -14,9 +24,6 @@
     - manager
     - ROOT
 
-- name: install cron
-  apt: name=cron state=present
-
   # TODO use cron module
 - name: copy clean-tmp-files cron
   copy:
@@ -24,9 +31,13 @@
     dest: /etc/cron.d/clean-tmp-files
     mode: 0644
 
-- name: copy fgdc2iso app
-  copy:
-    src: opt/tomcat/webapps/fgdc2iso.war
+- name: Find latest release of .war file
+  command: curl -s https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
+  register: latest_war_url
+
+- name: Pull latest .war file
+  get_url:
+    url: "{{ latest_war_url }}"
     dest: /opt/tomcat/webapps/fgdc2iso.war
     mode: 0644
 
