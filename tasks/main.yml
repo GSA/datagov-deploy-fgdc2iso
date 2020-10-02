@@ -5,6 +5,7 @@
     state: present
   vars:
     packages:
+      - curl
       - jq
       - cron
 
@@ -31,7 +32,7 @@
     mode: 0644
 
 - name: Find latest release of .war file
-  command: get_url https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
+  command: curl https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
   register: latest_war_url
 
 - name: Pull latest .war file
