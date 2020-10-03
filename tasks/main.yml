@@ -32,13 +32,15 @@
     mode: 0644
 
 - name: Find latest release of .war file
-  command: curl https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
+  shell: curl https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
   register: latest_war_url
 
 - name: Pull latest .war file
   get_url:
-    url: "{{ latest_war_url }}"
+    url: "{{ latest_war_url.stdout }}"
     dest: /opt/tomcat/webapps/fgdc2iso.war
+    owner: tomcat
+    group: tomcat
     mode: 0644
 
 - name: wait for war file to be deployed
