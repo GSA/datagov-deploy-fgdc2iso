@@ -24,6 +24,9 @@
     - manager
     - ROOT
 
+- name: install cron
+  apt: name=cron state=present
+
   # TODO use cron module
 - name: copy clean-tmp-files cron
   copy:
