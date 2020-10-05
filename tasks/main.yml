@@ -40,6 +40,7 @@
   tags: skip_ansible_lint
   args:
     warn: no
+  changed_when: False
 
 - name: Pull latest .war file
   get_url:
