@@ -35,7 +35,7 @@
     mode: 0644
 
 - name: Find latest release of .war file
-  shell: curl https://api.github.com/repos/GSA/catalog-fgdc2iso/releases/32097298/assets | jq '.[0].browser_download_url'
+  shell: curl -s https://api.github.com/repos/GSA/catalog-fgdc2iso/releases/32097298/assets | jq -r '.[0].browser_download_url'
   register: latest_war_url
   tags: skip_ansible_lint
   args:
