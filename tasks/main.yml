@@ -34,8 +34,11 @@
     dest: /etc/cron.d/clean-tmp-files
     mode: 0644
 
+# We used to use the latest war file until we moved to 'freezing' our repos
+# See: https://github.com/GSA/datagov-deploy/issues/2745
+# If you need to change this url without doing another release, add a variable to datagov-deploy
 - name: Find latest release of .war file
-  shell: curl -s https://api.github.com/repos/gsa/catalog-fgdc2iso/releases/latest | jq -r ".assets[] | .browser_download_url"
+  shell: curl -s {{ catalog_fgdc2iso_pinned_war_url }} | jq -r '.[0].browser_download_url'
   register: latest_war_url
   tags: skip_ansible_lint
   args:
